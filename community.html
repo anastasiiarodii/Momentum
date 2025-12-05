@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOMENTUM - Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0A0E27;
+            --primary-accent: #00F5FF;
+            --secondary-accent: #FF3366;
+            --tertiary-accent: #FFD700;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B8C8;
+            --surface-dark: #141927;
+            --surface-elevated: #1E2538;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1a1f3a 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--surface-dark);
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        /* Header */
+        .header {
+            padding: 24px 20px;
+            background: linear-gradient(180deg, var(--surface-elevated) 0%, transparent 100%);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 3px;
+        }
+
+        .notification-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary-accent);
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid var(--surface-dark);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: var(--primary-dark);
+            font-weight: 700;
+            border: none;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Leaderboard Section */
+        .section {
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-top: 20px;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        .time-filter {
+            font-size: 12px;
+            color: var(--primary-accent);
+            background: rgba(0, 245, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Top 3 Podium */
+        .podium {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .podium-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .podium-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin: 0 auto 12px;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            box-shadow: 0 8px 32px rgba(0, 245, 255, 0.3);
+        }
+
+        .podium-item.first .podium-avatar {
+            width: 100px;
+            height: 100px;
+            font-size: 40px;
+        }
+
+        .podium-rank {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--tertiary-accent);
+            color: var(--primary-dark);
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--surface-dark);
+        }
+
+        .podium-name {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .podium-score {
+            font-size: 12px;
+            color: var(--primary-accent);
+        }
+
+        .podium-base {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 12px 12px 0 0;
+            background: var(--surface-elevated);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .podium-item.first .podium-base {
+            padding: 20px 12px;
+        }
+
+        /* Leaderboard List */
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .leaderboard-entry {
+            background: var(--surface-elevated);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-entry:hover {
+            border-color: var(--primary-accent);
+            transform: translateX(4px);
+        }
+
+        .entry-rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .entry-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .entry-info {
+            flex: 1;
+        }
+
+        .entry-name {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .entry-stats {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .entry-score {
+            text-align: right;
+        }
+
+        .entry-points {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: var(--primary-accent);
+        }
+
+        .entry-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .leaderboard-entry.current-user {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(255, 51, 102, 0.1));
+            border-color: var(--primary-accent);
+        }
+
+        /* Challenges Section */
+        .challenge-card {
+            background: var(--surface-elevated);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 51, 102, 0.1) 0%, transparent 70%);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .challenge-badge {
+            font-size: 48px;
+        }
+
+        .challenge-participants {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .participant-count {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: var(--primary-accent);
+        }
+
+        .challenge-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .challenge-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .challenge-progress {
+            margin-bottom: 16px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+            border-radius: 8px;
+            transition: width 1s ease-out;
+        }
+
+        .join-challenge-btn {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 245, 255, 0.1);
+            color: var(--primary-accent);
+            border: 1px solid var(--primary-accent);
+            border-radius: 12px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .join-challenge-btn:hover {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: rgba(20, 25, 39, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 20px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .nav-item.active {
+            color: var(--primary-accent);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <h1 class="page-title">Community</h1>
+                <div class="notification-icon">
+                    🔔
+                    <div class="notification-badge">3</div>
+                </div>
+            </div>
+            <div class="tabs">
+                <div class="tab active">Leaderboard</div>
+                <div class="tab">Challenges</div>
+                <div class="tab">Friends</div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Top Performers</h2>
+                <div class="time-filter">This Week ▼</div>
+            </div>
+        </div>
+
+        <!-- Podium -->
+        <div class="podium">
+            <div class="podium-item">
+                <div class="podium-avatar">
+                    JL
+                    <div class="podium-rank">2</div>
+                </div>
+                <div class="podium-name">Jamie Lee</div>
+                <div class="podium-score">2,847 pts</div>
+                <div class="podium-base"></div>
+            </div>
+
+            <div class="podium-item first">
+                <div class="podium-avatar">
+                    SK
+                    <div class="podium-rank">👑</div>
+                </div>
+                <div class="podium-name">Sam Kim</div>
+                <div class="podium-score">3,592 pts</div>
+                <div class="podium-base"></div>
+            </div>
+
+            <div class="podium-item">
+                <div class="podium-avatar">
+                    MP
+                    <div class="podium-rank">3</div>
+                </div>
+                <div class="podium-name">Maya Patel</div>
+                <div class="podium-score">2,631 pts</div>
+                <div class="podium-base"></div>
+            </div>
+        </div>
+
+        <!-- Leaderboard List -->
+        <div class="section">
+            <div class="leaderboard-list">
+                <div class="leaderboard-entry">
+                    <div class="entry-rank">4</div>
+                    <div class="entry-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">TC</div>
+                    <div class="entry-info">
+                        <div class="entry-name">Taylor Chen</div>
+                        <div class="entry-stats">12 workouts • 8h 23m</div>
+                    </div>
+                    <div class="entry-score">
+                        <div class="entry-points">2,489</div>
+                        <div class="entry-label">points</div>
+                    </div>
+                </div>
+
+                <div class="leaderboard-entry">
+                    <div class="entry-rank">5</div>
+                    <div class="entry-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">DN</div>
+                    <div class="entry-info">
+                        <div class="entry-name">David Nguyen</div>
+                        <div class="entry-stats">10 workouts • 7h 15m</div>
+                    </div>
+                    <div class="entry-score">
+                        <div class="entry-points">2,234</div>
+                        <div class="entry-label">points</div>
+                    </div>
+                </div>
+
+                <div class="leaderboard-entry current-user">
+                    <div class="entry-rank">6</div>
+                    <div class="entry-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">AR</div>
+                    <div class="entry-info">
+                        <div class="entry-name">Alex Rivera (You)</div>
+                        <div class="entry-stats">9 workouts • 6h 42m</div>
+                    </div>
+                    <div class="entry-score">
+                        <div class="entry-points">2,087</div>
+                        <div class="entry-label">points</div>
+                    </div>
+                </div>
+
+                <div class="leaderboard-entry">
+                    <div class="entry-rank">7</div>
+                    <div class="entry-avatar" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">ES</div>
+                    <div class="entry-info">
+                        <div class="entry-name">Emma Stone</div>
+                        <div class="entry-stats">8 workouts • 5h 58m</div>
+                    </div>
+                    <div class="entry-score">
+                        <div class="entry-points">1,923</div>
+                        <div class="entry-label">points</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenges Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Active Challenges</h2>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-header">
+                    <div class="challenge-badge">🔥</div>
+                    <div class="challenge-participants">
+                        <div class="participant-count">1,247</div>
+                        <div>participants</div>
+                    </div>
+                </div>
+                <h3 class="challenge-title">30-Day Streak Challenge</h3>
+                <p class="challenge-description">
+                    Complete at least one workout every day for 30 consecutive days
+                </p>
+                <div class="challenge-progress">
+                    <div class="progress-label">
+                        <span>Your Progress</span>
+                        <span>7/30 days</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 23%;"></div>
+                    </div>
+                </div>
+                <button class="join-challenge-btn">Continue Challenge</button>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-header">
+                    <div class="challenge-badge">💪</div>
+                    <div class="challenge-participants">
+                        <div class="participant-count">892</div>
+                        <div>participants</div>
+                    </div>
+                </div>
+                <h3 class="challenge-title">10K Calorie Burn</h3>
+                <p class="challenge-description">
+                    Burn 10,000 calories through workouts this month
+                </p>
+                <div class="challenge-progress">
+                    <div class="progress-label">
+                        <span>Your Progress</span>
+                        <span>3,240 / 10,000 cal</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 32%;"></div>
+                    </div>
+                </div>
+                <button class="join-challenge-btn">Join Challenge</button>
+            </div>
+        </div>
+
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </a>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Stats</div>
+            </div>
+            <a href="community.html" class="nav-item active">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Community</div>
+            </a>
+            <div class="nav-item">
+                <div class="nav-icon">⚙️</div>
+                <div class="nav-label">Settings</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
